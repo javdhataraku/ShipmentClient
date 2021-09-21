@@ -12,6 +12,12 @@ namespace ShipmentClient
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+
+            JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
             using (HttpClient httpClient = new HttpClient())
             {
 
@@ -25,9 +31,7 @@ namespace ShipmentClient
                 using (HttpResponseMessage responseMessage = httpClient.PostAsync("http://localhost:7423/CreateShipment", jsonContent).Result)
                 {
                     string json = responseMessage.Content.ReadAsStringAsync().Result;
-
-                    JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions()
-                    { PropertyNameCaseInsensitive = true };
+                    Console.WriteLine(json);
 
 
                     Shipment created = JsonSerializer.Deserialize<Shipment>(json, jsonSerializerOptions);
@@ -45,10 +49,13 @@ namespace ShipmentClient
                     using (JsonContent jsonContent2 = JsonContent.Create(statusRequest))
                     using (HttpResponseMessage responseMessage2 = httpClient.PostAsync("http://localhost:7423/ChangeShipmentStatus", jsonContent2).Result)
                     {
+                        string json2 = responseMessage2.Content.ReadAsStringAsync().Result;
+                        Console.WriteLine(json2);
 
                     }
                 }
             }
+            Console.ReadLine();
 
         }
     }
